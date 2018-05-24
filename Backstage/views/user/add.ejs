@@ -1,0 +1,251 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/plugins/layui/css/layui.css" media="all" />
+    <style type="text/css">
+        .layui-layedit{
+            width: 590px;
+        }
+        .layui-upload{
+            float: right;
+            margin-top: 20px;
+        }
+        .layui-upload-img{
+            width: 92px;
+        }
+        .form_itme{
+            position: absolute;
+            width: 320px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="/user/update" method="post">
+    <input type="hidden" name="id"/>
+    <div class="layui-upload">
+        <button type="button" class="layui-btn" id="upload">上传图片</button>
+        <div class="layui-upload-list">
+            <img class="layui-upload-img" id="demo1">
+            <input type="hidden" name="personal_logo" id="personal_logo"/>
+            <p id="demoText"></p>
+        </div>
+    </div>
+    <div class="form_itme">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">昵称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="user_name" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="sex" value="男" title="男" checked="">
+            <input type="radio" name="sex" value="女" title="女">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">生日</label>
+            <div class="layui-input-inline">
+                <input type="text" name="birthday" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-inline">
+                <input type="text" name="age" id="age" lay-verify="required|number" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">手机</label>
+            <div class="layui-input-inline">
+                <input type="tel" name="phone" lay-verify="phone" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">Q Q</label>
+            <div class="layui-input-inline">
+                <input type="text" name="qq" lay-verify="required|number" maxlength="10" minlength="6" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:710px;">
+        <label class="layui-form-label">地址</label>
+        <div class="layui-input-inline address1">
+            <select name="quiz1" id="province">
+                <option value="">请选择省</option>
+            </select>
+        </div>
+        <div class="layui-input-inline address2">
+            <select name="quiz2">
+                <option value="">请选择市</option>
+            </select>
+        </div>
+        <div class="layui-input-inline address3">
+            <select name="quiz3">
+                <option value="">请选择县/区</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">个性签名</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容" name="sign" lay-verify="required" style="width: 590px;" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">个人说明</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea layui-hide" style="width: 590px;"  name="personal_note" lay-verify="content" id="LAY_demo_editor"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+    </div>
+</form>
+</body>
+<script src="/plugins/layui/layui.all.js" charset="utf-8"></script>
+<script src="/datas/area_data.js"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate','upload'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,$ = layui.jquery
+            ,layedit = layui.layedit
+            ,upload = layui.upload
+            ,laydate = layui.laydate;
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            });
+            var index=parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        });
+
+
+        //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#upload'
+                ,url: '/user/upload',
+                accept:'images',
+                field:'person_logo'
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#personal_logo').val(result);
+                        $('#demo1').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+                    //如果上传失败
+                    if(res.code > 0){
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                    $('#upload').remove();
+                }
+                ,error: function(){
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function(){
+                        uploadInst.upload();
+                    });
+                }
+            });
+
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //三级联动
+        $('.address1').on('click',function(event){
+            for(i=0;i<Area.length;i++){
+                $(this).find('.layui-anim-upbit').append('<dd lay-value="'+i+'" class="">'+Area[i].provinceName+'</dd>');
+            }
+            event.preventDefault();
+        });
+
+         var index='';
+         var index1='';
+
+        $('.address1').delegate('dd','click',function(){
+            $('.address1 input').val($(this).html()).attr('name','address1');
+            index=$(this).attr('lay-value');
+        });
+
+        $('.address2').on('click',function(event){
+            $(this).find('.layui-anim-upbit').empty();
+            if(index=='') {
+                layer.alert("请选择省！",{offset:['200px','280px'],icon: 5});
+                return false;
+            }
+            if(typeof Area[index].mallCityList!='undefined'&&Area[index].mallCityList.length!=0){
+                for(i=0;i<Area[index].mallCityList.length;i++){
+                    $(this).find('.layui-anim-upbit').append('<dd lay-value="'+i+'" class="">'+Area[index].mallCityList[i].cityName+'</dd>');
+                }
+                event.preventDefault();
+            }else{
+                layer.alert("暂无相关市区",{offset:['200px','280px'],icon: 5});
+            }
+        });
+
+        $('.address2').delegate('dd','click',function(){
+            $('.address2 input').val($(this).html()).attr('name','address2');
+            index1=$(this).attr('lay-value');
+        });
+
+        $('.address3').on('click',function(event){
+            $(this).find('.layui-anim-upbit').empty();
+            if(index1==''){
+                layer.alert('请选择市区',{offset:['200px','280px'],icon: 5});
+                return false;
+            }
+            if(typeof Area[index].mallCityList[index1].mallAreaList!='undefined'&&Area[index].mallCityList[index1].mallAreaList.length!=0){
+                for(i=0;i<Area[index].mallCityList[index1].mallAreaList.length;i++){
+                    $(this).find('.layui-anim-upbit').append('<dd lay-value="'+i+'" class="">'+Area[index].mallCityList[index1].mallAreaList[i].areaName+'</dd>');
+                }
+                event.preventDefault();
+            }else{
+                layer.alert('暂无相关县区',{offset:['200px','280px'],icon: 5});
+            }
+        });
+
+        $('.address3').delegate('dd','click',function(){
+            $('.address3 input').val($(this).html()).attr('name','address3');
+        });
+    });
+</script>
+</html>

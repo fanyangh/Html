@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基于canvas的在线模拟画板</title>
+    <link rel="stylesheet" href="/css/canvas.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/shape.js"></script>
+    <script src="/js/draw.js"></script>
+</head>
+<body>
+<div class="box">
+    <ul class="menu">
+        <li class="active">文件</li>
+        <li>画图</li>
+        <li>颜色</li>
+        <li>类型</li>
+        <li>线条宽度</li>
+        <li>橡皮擦</li>
+    </ul>
+    <div class="body">
+        <div class="tool">
+            <ul class="option op-active" action="/upload">
+                <li class="new">新建</li>
+                <li class="save" >保存</li>
+                <li class="back">返回</li>
+            </ul>
+            <ul class="option">
+                <li data-role="line">线</li>
+                <li data-role="pen">铅笔</li>
+                <li data-role="arc">圆</li>
+                <li data-role="rect">矩形</li>
+                <li data-role="jiao">多角形</li>
+                <li data-role="bian">多边形</li>
+            </ul>
+            <ul class="option">
+                <li>
+                    <input type="color" data-role="strokeStyle">
+                </li>
+                <li>
+                    <input type="color" data-role="fillStyle">
+                </li>
+            </ul>
+            <ul class="option">
+                <li data-role="stroke">线条</li>
+                <li data-role="fill">填充</li>
+            </ul>
+            <ul class="option">
+                <li data-role="1">细</li>
+                <li data-role="5">中</li>
+                <li data-role="10">特粗</li>
+                <li class="input">
+                    <input type="number" placeholder="请输入数字">
+                </li>
+            </ul>
+            <ul class="option">
+                <li>
+                    <input type="number" value="10" placeholder="请输入大小">
+                </li>
+            </ul>
+        </div>
+
+
+        
+        <div class="canvas">
+            <canvas width="1000" height="600">您的电脑不支持canvas.请升级浏览器或使用谷歌浏览器！</canvas>
+            <div class="copy"></div>
+            <div class="xp"></div>
+        </div>
+    </div>
+</div>
+<div style="text-align:center;">
+</div>
+</body>
+</html>

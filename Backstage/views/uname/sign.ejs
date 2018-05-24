@@ -1,0 +1,234 @@
+
+
+<!doctype html>
+<html>
+<head>
+<title>绘凡欢迎你</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="/css/sign.css" rel='stylesheet' type='text/css' media="all" />
+<!-- /css files -->
+<style type="text/css">  
+            body{  
+                margin: 0;  
+            }  
+            #canvas{  
+                display: block;  
+                background: #000;  
+                margin: 0 auto;
+                z-index: -1;  
+            }
+            .content {
+            	position: relative;
+            	text-size:18px;
+
+            } 
+            .main {
+            	position: absolute;
+            	width:85%;
+            	top: 8%;
+            	left:7%;
+            	text-size:18px;
+
+            } 
+            #text {
+            	position: absolute;
+            	z-index: -1000;
+
+            }
+           
+        </style>
+</head>
+<body>
+<div class="content">
+    		<canvas id="canvas"></canvas>
+	        <div class="main">
+	        	<!-- <h1>很荣幸你的到来</h1> -->
+				<div class="log">
+					<div class="content2">
+						<h2>注册</h2>
+						<form class="layui-form" action="/uname/sign" method="post">
+                            <input type="text" name="login_name"  lay-verify="email" placeholder="请输入用户名" autocomplete="off" class="layui-input" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '邮箱';}">
+                            <input type="password" name="password"   placeholder="请输入密码" autocomplete="off" class="layui-input" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '密码';}">
+							<input type="email" name="email"  lay-verify="required" placeholder="请输入邮箱" autocomplete="off" class="layui-input" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '昵称';}">
+							<input type="tel" name="usrtel" value="电话" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '电话';}">
+							
+							<input type="submit" class="layui-btn layui-btn-normal submit register" lay-filter="submit" value="注册">
+						</form>
+					</div>
+					
+					<div class="clear"></div>
+				</div>
+	        	
+	        </div>
+    		
+    	</div>  
+        
+
+        <script> 
+        //star 对象 
+            function Starry(){  
+                this.cxt=canvas.getContext("2d");  
+                canvas.width=window.innerWidth;  
+                canvas.height=window.innerHeight;  
+                this.cW=canvas.width;  
+                this.cH=canvas.height;  
+                this.num=200;  
+                this.data=[];  
+            }  
+
+
+            //star原型对象
+            Starry.prototype={ 
+             	//	随机点方法
+                init: function(){  
+                    for (var i=0;i<this.num;i++) {  
+                        this.data[i]={  
+                            x:Math.random()*this.cW,  
+                            y:Math.random()*this.cH,  
+                            cX:Math.random()*0.6-0.3,  
+                            cY:Math.random()*0.6-0.3  
+                        };  
+                        this.drawCircle(this.data[i].x,this.data[i].y);  
+                    }  
+                      
+                }
+                , 
+
+                //生成随机点
+                drawCircle: function(x,y){  
+                    var cxt=canvas.getContext("2d");  
+                    cxt.save();//保存路径  
+                    cxt.fillStyle="pink";  
+                    cxt.beginPath();//开始路径  
+                    cxt.arc(x,y,1,0,Math.PI*2,false);  
+                    cxt.closePath();//结束路径  
+                    cxt.fill();//填充方法  
+                    cxt.restore();//释放路径  
+                },
+
+                //随机点连线
+                drawLine: function(x1,y1,x2,y2){  
+                    var cxt=this.cxt;  
+                    var color=cxt.createLinearGradient(x1,y1,x2,y2);  
+                    color.addColorStop(0,"#969696");  
+                    color.addColorStop(1,"#894722");  
+                    cxt.save();  
+                    cxt.strokeStyle=color;  
+                    cxt.beginPath();//开始路径  
+                    cxt.moveTo(x1,y1);  
+                    cxt.lineTo(x2,y2);  
+                    cxt.closePath();//结束路径  
+                    cxt.stroke();//填充方法  
+                    cxt.restore();//释放路径  
+                      
+                }, 
+
+                //核心方法
+                moveCircle: function(){  
+                    var self=this;  
+                    self.cxt.clearRect(0,0,self.cW,self.cH);  
+                    for(var i=0;i<self.num;i++){  
+                        self.data[i].x+=self.data[i].cX;  
+                        self.data[i].y+=self.data[i].cY;  
+                        if(self.data[i].x>self.cW||self.data[i].x<0){  
+                            self.data[i].cX=-self.data[i].cX;  
+                        }  
+                        if(self.data[i].x>self.cH||self.data[i].y<0){  
+                            self.data[i].cY=-self.data[i].cY;  
+                        }  
+                        this.drawCircle(self.data[i].x,self.data[i].y);  
+                        for(var j=i+1;j<self.num;j++){  
+                            if(Math.pow(self.data[i].x-self.data[j].x,2)  
+                            +Math.pow(self.data[i].y-self.data[j].y,2)  
+                            <=50*50){  
+                                self.drawLine(self.data[i].x,self.data[i].y,  
+                                    self.data[j].x,self.data[j].y);  
+                            }  
+                        }  
+                    }  
+                }  
+            }
+            //初始化实例  
+            var starry=new Starry();  
+            starry.init();
+            //实现动态效果  
+            setInterval(function(){starry.moveCircle();},1);  
+        </script>
+        <script src="/plugins/layui/layui.all.js" charset="utf-8"></script>
+<script type="text/javascript">
+    layui.use(['form'], function(){
+        var layer=layui.layer,
+            $=layui.jquery,
+            form=layui.form;
+        var code='';
+        //邮箱验证
+        $('.getCode').click(function(){
+            if($('input[name=email]').val()==''){
+                layer.alert('请输入邮箱',{icon:5});
+            }else if(email==$('input[name=email]').val()){
+                $.post('/user/getCode',{email:$('input[name=email]').val(),subject:'欢迎注册'},function (data) {
+                    $('.getCode').attr('disabled','disabled');
+                    var timer=60;
+                    clart=setInterval(function () {
+                        $('.getCode').html('('+(timer--)+'s )');
+                        if(timer<=0) {
+                            $('.getCode').removeAttr('disabled');
+                            $('.getCode').html('重新发送');
+                            clearInterval(clart);
+                        }
+                    },1000);
+                    code=data.messageCode;
+                    layer.alert('验证码已发送至邮箱，请查收', {icon: 6});
+                });
+            }else{
+                layer.alert('请输出正确的邮箱',{icon:5});
+            }
+            return false;
+        });
+
+        $('input[name=login_name]').blur(function(){
+            if($(this).val()==''||$(this).val()==null){
+                $(this).focus();
+                layer.msg('请输入登录名',{time:1000});
+            }else{
+                $.post('/user/findUserByLoginName',{login_name:$(this).val()},function(data){
+                   if(data==''){
+                       $('.name_check').html('<i class="iconfont"  style="color: green">&#xe615;</i>');
+                   }else{
+                       $('.name_check').html('<i class="iconfont"  style="color: #f80909;">&#xe65d; </i><span style="color: #fff">该用户名已注册</span>');
+                   }
+                });
+            }
+        });
+        $('input[name=repassword]').blur(function () {
+            if($(this).val()!=''&&$(this).val()!=$('input[name=password]').val()){
+                $('.repassword_check').html('<i class="iconfont"  style="color: #f80909;">&#xe65d; </i><span style="color: #fff">两次密码不一致</span>');
+            }else{
+                $('.repassword_check,.password_check').html('<i class="iconfont" style="color: green">&#xe615;</i>');
+            }
+        });
+
+        $('input[name=email]').blur(function(){
+            if(!$(this).val().trim().match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)){
+                layer.msg('邮箱格式错误',{time:1000});
+                $(this).focus();
+                return false;
+            }
+            $('.email_check').html('<i class="iconfont" id="email_check"  style="color: green">&#xe615;</i>');
+        });
+
+        form.on('submit(submit)', function(data){
+            layer.alert('注册成功',{icon:6},function (index) {
+                window.location.href='/uname';
+                layer.close(index);
+            });
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
